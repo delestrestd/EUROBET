@@ -22,7 +22,7 @@ jobs:
           p2 = bytes.fromhex(hx).decode()
           assert len(p2) == 9000, len(p2)
           Path("calendrier-data.gz.b64.part2").write_text(p2)
-          ah = "".join(Path(f"calendrier-addon.js.hex{i}").read_text().strip() for i in range(3))
+          ah = "".join(Path(f"calendrier-addon.js.hex{i}").read_text().strip() for i in range(6))
           addon = bytes.fromhex(ah)
           Path("calendrier-addon.js").write_bytes(addon)
           print("part2", len(p2), hashlib.sha256(p2.encode()).hexdigest())
