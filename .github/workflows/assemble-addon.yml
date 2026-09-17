@@ -1,0 +1,39 @@
+name: Assemble Addon
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'calendrier-addon.js.hex*'
+      - '.github/workflows/assemble-addon.yml'
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assemble addon from hex
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+          import hashlib, re
+          def hxread(p):
+              return re.sub(r'[^0-9a-f]', '', Path(p).read_text().lower())
+          n = len(list(Path('.').glob('calendrier-addon.js.hex*')))
+          ah = ''.join(hxread(f'calendrier-addon.js.hex{i}') for i in range(n))
+          addon = bytes.fromhex(ah)
+          expect = 'ed72f56a730603df9cf85ee6a4a646fe0d7845491a280c03d3343ae0323300f6'
+          got = hashlib.sha256(addon).hexdigest()
+          assert got == expect, got
+          Path('calendrier-addon.js').write_bytes(addon)
+          print('addon OK', len(addon), got)
+          for p in Path('.').glob('calendrier-addon.js.hex*'):
+              p.unlink(); print('removed', p)
+          PY
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "fix(calendriers): update addon to prefer loadParts()"
+          git push
