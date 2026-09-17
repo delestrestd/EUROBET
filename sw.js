@@ -5,6 +5,8 @@ const PRECACHE = [
   './index.html',
   './manifest.webmanifest',
   './calendrier-data.json',
+  './calendrier-data.gz.b64',
+  './calendrier-addon.js',
   './icon-192.png',
   './icon-512.png',
   './apple-touch-icon.png'

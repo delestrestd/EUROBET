@@ -8,7 +8,7 @@ https://delestrestd.github.io/EUROBET/
 
 ## Calendriers
 
-Onglet **Calendriers** : recherche d’équipe, filtre championnat / statut / dates, données dans `calendrier-data.json` (issu du CSV fixtures).
+Onglet **Calendriers** : recherche d’équipe, filtre championnat / statut / dates, données dans `calendrier-data.json` / `calendrier-data.gz.b64` (issu du CSV fixtures) via `calendrier-addon.js`.
 
 ## Déploiement automatique
 
