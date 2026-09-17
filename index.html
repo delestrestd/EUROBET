@@ -1230,6 +1230,7 @@
       <button class="tab active" data-tab="matches"><span class="tab-full">Matchs</span><span class="tab-short">⚽</span><span class="tab-cap">Matchs</span></button>
       <button class="tab" data-tab="odds"><span class="tab-full">Cotes & Paris</span><span class="tab-short">💰</span><span class="tab-cap">Cotes</span></button>
       <button class="tab" data-tab="standings"><span class="tab-full">Classement</span><span class="tab-short">📊</span><span class="tab-cap">Class.</span></button>
+      <button class="tab" data-tab="calendriers"><span class="tab-full">Calendriers</span><span class="tab-short">📅</span><span class="tab-cap">Cal.</span></button>
       <button class="tab" data-tab="stats"><span class="tab-full">Historique</span><span class="tab-short">📜</span><span class="tab-cap">Histo</span></button>
     </div>
 
@@ -1382,7 +1383,7 @@
     const HISTORICAL_OUTLIERS = {"season": "2025/26", "source": "football-data.co.uk (Bet365)", "underdogHits": [{"league": "Bundesliga", "date": "24/01/2026", "home": "Bayern Munich", "away": "Augsburg", "winner": "Augsburg", "odds": 17.0, "score": "1-2", "side": "2"}, {"league": "Ligue 1", "date": "04/01/2026", "home": "Marseille", "away": "Nantes", "winner": "Nantes", "odds": 12.0, "score": "0-2", "side": "2"}, {"league": "Bundesliga", "date": "14/12/2025", "home": "Bayern Munich", "away": "Mainz", "winner": "Nul", "odds": 11.0, "score": "2-2", "side": "N"}, {"league": "Serie A", "date": "24/05/2026", "home": "Milan", "away": "Cagliari", "winner": "Cagliari", "odds": 11.0, "score": "1-2", "side": "2"}, {"league": "La Liga", "date": "02/03/2026", "home": "Real Madrid", "away": "Getafe", "winner": "Getafe", "odds": 10.0, "score": "0-1", "side": "2"}, {"league": "La Liga", "date": "07/12/2025", "home": "Real Madrid", "away": "Celta", "winner": "Celta", "odds": 9.5, "score": "0-2", "side": "2"}, {"league": "Serie A", "date": "31/08/2025", "home": "Inter", "away": "Udinese", "winner": "Udinese", "odds": 9.5, "score": "1-2", "side": "2"}, {"league": "Serie A", "date": "22/02/2026", "home": "Milan", "away": "Parma", "winner": "Parma", "odds": 9.5, "score": "0-1", "side": "2"}, {"league": "Premier League", "date": "25/10/2025", "home": "Chelsea", "away": "Sunderland", "winner": "Sunderland", "odds": 9.0, "score": "1-2", "side": "2"}, {"league": "Premier League", "date": "24/05/2026", "home": "Man City", "away": "Aston Villa", "winner": "Aston Villa", "odds": 9.0, "score": "1-2", "side": "2"}, {"league": "Serie A", "date": "23/08/2025", "home": "Milan", "away": "Cremonese", "winner": "Cremonese", "odds": 9.0, "score": "1-2", "side": "2"}, {"league": "Serie A", "date": "17/05/2026", "home": "Juventus", "away": "Fiorentina", "winner": "Fiorentina", "odds": 8.5, "score": "0-2", "side": "2"}, {"league": "Ligue 1", "date": "19/04/2026", "home": "Paris SG", "away": "Lyon", "winner": "Lyon", "odds": 8.5, "score": "1-2", "side": "2"}, {"league": "Serie A", "date": "01/12/2025", "home": "Bologna", "away": "Cremonese", "winner": "Cremonese", "odds": 8.0, "score": "1-3", "side": "2"}, {"league": "Serie A", "date": "11/04/2026", "home": "Milan", "away": "Udinese", "winner": "Udinese", "odds": 8.0, "score": "0-3", "side": "2"}, {"league": "Premier League", "date": "11/04/2026", "home": "Arsenal", "away": "Bournemouth", "winner": "Bournemouth", "odds": 7.5, "score": "1-2", "side": "2"}, {"league": "Ligue 1", "date": "17/05/2026", "home": "Lille", "away": "Auxerre", "winner": "Auxerre", "odds": 7.5, "score": "0-2", "side": "2"}, {"league": "La Liga", "date": "16/02/2026", "home": "Girona", "away": "Barcelona", "winner": "Girona", "odds": 7.0, "score": "2-1", "side": "1"}, {"league": "Bundesliga", "date": "18/04/2026", "home": "Leverkusen", "away": "Augsburg", "winner": "Augsburg", "odds": 7.0, "score": "1-2", "side": "2"}, {"league": "Serie A", "date": "14/09/2025", "home": "Roma", "away": "Torino", "winner": "Torino", "odds": 7.0, "score": "0-1", "side": "2"}, {"league": "Serie A", "date": "09/11/2025", "home": "Atalanta", "away": "Sassuolo", "winner": "Sassuolo", "odds": 7.0, "score": "0-3", "side": "2"}, {"league": "Serie A", "date": "18/04/2026", "home": "Napoli", "away": "Lazio", "winner": "Lazio", "odds": 7.0, "score": "0-2", "side": "2"}, {"league": "Ligue 1", "date": "13/02/2026", "home": "Rennes", "away": "Paris SG", "winner": "Rennes", "odds": 7.0, "score": "3-1", "side": "1"}, {"league": "Ligue 1", "date": "06/03/2026", "home": "Paris SG", "away": "Monaco", "winner": "Monaco", "odds": 7.0, "score": "1-3", "side": "2"}, {"league": "Premier League", "date": "23/08/2025", "home": "Man City", "away": "Tottenham", "winner": "Tottenham", "odds": 6.25, "score": "0-2", "side": "2"}], "highScores": [{"league": "Bundesliga", "date": "27/09/2025", "home": "M'gladbach", "away": "Ein Frankfurt", "score": "4-6", "total": 10, "odds_h": 2.6, "odds_a": 2.7}, {"league": "Premier League", "date": "02/12/2025", "home": "Fulham", "away": "Man City", "score": "4-5", "total": 9, "odds_h": 5.5, "odds_a": 1.57}, {"league": "Bundesliga", "date": "11/01/2026", "home": "Bayern Munich", "away": "Wolfsburg", "score": "8-1", "total": 9, "odds_h": 1.14, "odds_a": 15.0}, {"league": "Bundesliga", "date": "04/04/2026", "home": "Leverkusen", "away": "Wolfsburg", "score": "6-3", "total": 9, "odds_h": 1.5, "odds_a": 6.0}, {"league": "Ligue 1", "date": "30/08/2025", "home": "Toulouse", "away": "Paris SG", "score": "3-6", "total": 9, "odds_h": 7.5, "odds_a": 1.4}, {"league": "Ligue 1", "date": "17/05/2026", "home": "Strasbourg", "away": "Monaco", "score": "5-4", "total": 9, "odds_h": 3.4, "odds_a": 2.1}, {"league": "Premier League", "date": "15/12/2025", "home": "Man United", "away": "Bournemouth", "score": "4-4", "total": 8, "odds_h": 1.85, "odds_a": 4.0}, {"league": "La Liga", "date": "06/12/2025", "home": "Betis", "away": "Barcelona", "score": "3-5", "total": 8, "odds_h": 4.0, "odds_a": 1.73}, {"league": "Bundesliga", "date": "22/11/2025", "home": "Bayern Munich", "away": "Freiburg", "score": "6-2", "total": 8, "odds_h": 1.17, "odds_a": 13.0}, {"league": "Serie A", "date": "23/01/2026", "home": "Inter", "away": "Pisa", "score": "6-2", "total": 8, "odds_h": 1.18, "odds_a": 15.0}, {"league": "Ligue 1", "date": "30/08/2025", "home": "Lorient", "away": "Lille", "score": "1-7", "total": 8, "odds_h": 3.4, "odds_a": 2.1}, {"league": "Ligue 1", "date": "18/10/2025", "home": "Marseille", "away": "Le Havre", "score": "6-2", "total": 8, "odds_h": 1.33, "odds_a": 9.0}, {"league": "Ligue 1", "date": "29/10/2025", "home": "Nantes", "away": "Monaco", "score": "3-5", "total": 8, "odds_h": 4.75, "odds_a": 1.7}, {"league": "Ligue 1", "date": "26/04/2026", "home": "Le Havre", "away": "Metz", "score": "4-4", "total": 8, "odds_h": 1.67, "odds_a": 5.0}, {"league": "Premier League", "date": "03/12/2025", "home": "Brighton", "away": "Aston Villa", "score": "3-4", "total": 7, "odds_h": 2.15, "odds_a": 3.4}, {"league": "Premier League", "date": "07/01/2026", "home": "Newcastle", "away": "Leeds", "score": "4-3", "total": 7, "odds_h": 1.67, "odds_a": 5.0}, {"league": "Premier League", "date": "28/02/2026", "home": "Liverpool", "away": "West Ham", "score": "5-2", "total": 7, "odds_h": 1.42, "odds_a": 6.5}, {"league": "La Liga", "date": "27/09/2025", "home": "Ath Madrid", "away": "Real Madrid", "score": "5-2", "total": 7, "odds_h": 3.0, "odds_a": 2.3}]};
 
     let currentLeague = 'eng.1';
-    let currentTab = 'matches';
+    window.currentTab = 'matches'; let currentTab = window.currentTab;
     let viewMode = 'upcoming'; // 'upcoming' | 'today' | 'date' | 'live'
     let autoRefreshTimer = null;
     let liveOddsSnap = {}; // eventId -> { home, draw, away } for movement
@@ -1458,8 +1459,9 @@
       t.onclick = () => {
         document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
         t.classList.add('active');
-        currentTab = t.dataset.tab;
+        currentTab = t.dataset.tab; window.currentTab = currentTab;
         if (currentTab === 'odds') oddsFilter.league = currentLeague;
+        if (currentTab === 'calendriers') { window.__renderCalendriers && window.__renderCalendriers(); return; }
         loadData();
       };
     });
@@ -1485,7 +1487,7 @@
         datePicker.value = new Date().toISOString().slice(0, 10);
         setViewMode('live');
         document.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x.dataset.tab === 'odds'));
-        currentTab = 'odds';
+        currentTab = 'odds'; window.currentTab = currentTab;
         oddsFilter.league = 'all';
         loadData();
       };
@@ -1545,7 +1547,7 @@
 
     document.getElementById('btnShowSlips')?.addEventListener('click', () => {
       document.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x.dataset.tab === 'stats'));
-      currentTab = 'stats';
+      currentTab = 'stats'; window.currentTab = currentTab;
       loadData();
     });
 
@@ -1650,6 +1652,9 @@
     }
 
     async function loadData(silent = false) {
+      if (currentTab === 'calendriers') {
+        if (window.__renderCalendriers) { window.__renderCalendriers(); return; }
+      }
       if (!silent) {
         contentEl.innerHTML = '<div class="loader"><div class="spinner"></div></div>';
         errorBox.style.display = 'none';
@@ -3754,7 +3759,7 @@
 
     // —— Gestion tactile mobile ——
     (function setupTouchUX() {
-      const TAB_ORDER = ['matches', 'odds', 'standings', 'stats'];
+      const TAB_ORDER = ['matches', 'odds', 'standings', 'calendriers', 'stats'];
       let touchStartX = 0, touchStartY = 0, touchStartT = 0;
       let scrolling = false;
       let scrollTimer = null;
@@ -3838,6 +3843,8 @@
     loadData();
     setupAutoRefresh();
 
+    window.loadData = loadData;
+    window.contentEl = contentEl;
     // PWA : enregistrement service worker (nécessite https ou localhost)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -3865,5 +3872,6 @@
       if (bar) bar.style.display = 'none';
     });
   </script>
+  <script src="./calendrier-addon.js" defer></script>
 </body>
 </html>
