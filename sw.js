@@ -1,9 +1,10 @@
 /* EuroBet Live — service worker (cache app shell) */
-const CACHE = 'eurobet-v1';
+const CACHE = 'eurobet-v2-calendriers';
 const PRECACHE = [
   './',
   './index.html',
   './manifest.webmanifest',
+  './calendrier-data.json',
   './icon-192.png',
   './icon-512.png',
   './apple-touch-icon.png'
