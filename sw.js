@@ -4,9 +4,11 @@ const PRECACHE = [
   './',
   './index.html',
   './manifest.webmanifest',
-  './calendrier-data.json',
-  './calendrier-data.gz.b64',
   './calendrier-addon.js',
+  './calendrier-data.gz.b64.part0',
+  './calendrier-data.gz.b64.part1',
+  './calendrier-data.gz.b64.part2',
+  './calendrier-data.gz.b64.part3',
   './icon-192.png',
   './icon-512.png',
   './apple-touch-icon.png'
@@ -14,7 +16,11 @@ const PRECACHE = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE).then((c) => c.addAll(PRECACHE)).then(() => self.skipWaiting())
+    caches.open(CACHE).then(async (c) => {
+      for (const url of PRECACHE) {
+        try { await c.add(url); } catch (e) { /* ignore missing optional assets */ }
+      }
+    }).then(() => self.skipWaiting())
   );
 });
 
@@ -29,7 +35,6 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // API ESPN / Odds : réseau d’abord (données live)
   if (
     url.hostname.includes('espn.com') ||
     url.hostname.includes('the-odds-api.com') ||
@@ -41,7 +46,6 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // App shell : cache d’abord
   event.respondWith(
     caches.match(event.request).then((cached) => {
       const net = fetch(event.request)
