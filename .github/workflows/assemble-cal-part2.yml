@@ -4,7 +4,6 @@ on:
   push:
     paths:
       - 'calendrier-data.gz.b64.part2.hex*'
-      - 'calendrier-addon.js.hex*'
       - '.github/workflows/assemble-cal-part2.yml'
 jobs:
   assemble:
@@ -13,29 +12,29 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Assemble from hex segments
+      - name: Assemble part2 from hex
         run: |
           python3 <<'PY'
           from pathlib import Path
-          import hashlib
-          hx = "".join(Path(f"calendrier-data.gz.b64.part2.hex{i}").read_text().strip() for i in range(6))
+          import hashlib, re
+          def hxread(p):
+              return re.sub(r'[^0-9a-f]', '', Path(p).read_text().lower())
+          hx = ''.join(hxread(f'calendrier-data.gz.b64.part2.hex{i}') for i in range(6))
           p2 = bytes.fromhex(hx).decode()
           assert len(p2) == 9000, len(p2)
-          Path("calendrier-data.gz.b64.part2").write_text(p2)
-          ah = "".join(Path(f"calendrier-addon.js.hex{i}").read_text().strip() for i in range(6))
-          addon = bytes.fromhex(ah)
-          Path("calendrier-addon.js").write_bytes(addon)
-          print("part2", len(p2), hashlib.sha256(p2.encode()).hexdigest())
-          print("addon", len(addon), hashlib.sha256(addon).hexdigest())
-          for p in list(Path(".").glob("calendrier-data.gz.b64.part2.hex*")) + list(Path(".").glob("calendrier-addon.js.hex*")) + [Path("calendrier-data.gz.b64.part2.seg0")]:
+          expect = '01703cb8ae9de78d935b8668ae8a1ecd8c5ec5f4a39d31e29b52b335b313f6da'
+          got = hashlib.sha256(p2.encode()).hexdigest()
+          assert got == expect, got
+          Path('calendrier-data.gz.b64.part2').write_text(p2)
+          print('part2 OK', len(p2), got)
+          for p in list(Path('.').glob('calendrier-data.gz.b64.part2.hex*')) + [Path('calendrier-data.gz.b64.part2.seg0')]:
               if p.exists():
-                  p.unlink()
-                  print("removed", p)
+                  p.unlink(); print('removed', p)
           PY
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git diff --staged --quiet || git commit -m "fix(calendriers): restore correct part2 + addon from hex"
+          git diff --staged --quiet || git commit -m "fix(calendriers): restore correct part2 from hex segments"
           git push
