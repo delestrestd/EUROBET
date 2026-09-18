@@ -37,7 +37,7 @@ jobs:
           done
           # Calendriers: loader + data parts + addon b64 parts
           cp calendrier-addon.js _site/ 2>/dev/null || true
-          for f in calendrier-data.gz.b64.part* calendrier-addon.b64.part*; do
+          for f in calendrier-data.gz.b64.part* calendrier-addon.b64.part* calendrier-addon.seg*.js; do
             [ -f "$f" ] && cp "$f" _site/
           done
           ls -la _site
