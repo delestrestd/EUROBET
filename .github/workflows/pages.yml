@@ -35,9 +35,10 @@ jobs:
           for f in manifest.webmanifest sw.js icon.svg icon-192.png icon-512.png apple-touch-icon.png VERSION.txt .nojekyll national-cups-meta.json; do
             [ -f "$f" ] && cp "$f" _site/
           done
-          # Calendriers: loader + data parts + addon b64 parts + v6c3 history/search patch
+          # Calendriers: loader + data parts + addon b64 parts + v6c3/v6c4 patches
           cp calendrier-addon.js _site/ 2>/dev/null || true
-          for f in calendrier-data.gz.b64.part* calendrier-addon.b64.part* calendrier-addon.seg*.js calendrier-v6c3.b64.part*; do
+          [ -f calendrier-v6c4.js ] && cp calendrier-v6c4.js _site/
+          for f in calendrier-data.gz.b64.part* calendrier-addon.b64.part* calendrier-addon.seg*.js calendrier-v6c3.b64.part* calendrier-v6c4.b64.part*; do
             [ -f "$f" ] && cp "$f" _site/
           done
           ls -la _site
