@@ -1,5 +1,5 @@
 /* EuroBet Live — service worker (cache app shell) */
-const CACHE = 'eurobet-v4-calendriers-uefa-cups';
+const CACHE = 'eurobet-v5-calendriers-cups-aliases';
 const PRECACHE = [
   './',
   './index.html',
@@ -34,6 +34,25 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
+
+  /* Calendrier assets: network-first so cup data/CSS/aliases are never stuck in SW cache */
+  if (
+    url.pathname.includes('calendrier-addon') ||
+    url.pathname.includes('calendrier-data')
+  ) {
+    event.respondWith(
+      fetch(event.request)
+        .then((res) => {
+          if (res && res.ok && event.request.method === 'GET') {
+            const clone = res.clone();
+            caches.open(CACHE).then((c) => c.put(event.request, clone));
+          }
+          return res;
+        })
+        .catch(() => caches.match(event.request))
+    );
+    return;
+  }
 
   if (
     url.hostname.includes('espn.com') ||
