@@ -1,18 +1,27 @@
 /* EuroBet Live — service worker (cache app shell) */
-const CACHE = 'eurobet-v6c3-search-hist';
+const CACHE = 'eurobet-v6c4-search-h2h-clear';
 const PRECACHE = [
   './',
   './index.html',
   './manifest.webmanifest',
   './calendrier-addon.js',
-  './calendrier-v6c3.b64.part0',
-  './calendrier-v6c3.b64.part1',
-  './calendrier-v6c3.b64.part2',
-  './calendrier-v6c3.b64.part3',
-  './calendrier-v6c3.b64.part4',
-  './calendrier-v6c3.b64.part5',
-  './calendrier-v6c3.b64.part6',
-  './calendrier-v6c3.b64.part7',
+  './calendrier-v6c4.b64.part0',
+  './calendrier-v6c4.b64.part1',
+  './calendrier-v6c4.b64.part2',
+  './calendrier-v6c4.b64.part3',
+  './calendrier-v6c4.b64.part4',
+  './calendrier-v6c4.b64.part5',
+  './calendrier-v6c4.b64.part6',
+  './calendrier-v6c4.b64.part7',
+  './calendrier-v6c4.b64.part8',
+  './calendrier-v6c4.b64.part9',
+  './calendrier-v6c4.b64.part10',
+  './calendrier-v6c4.b64.part11',
+  './calendrier-v6c4.b64.part12',
+  './calendrier-v6c4.b64.part13',
+  './calendrier-v6c4.b64.part14',
+  './calendrier-v6c4.b64.part15',
+  './calendrier-v6c4.b64.part16',
   './calendrier-addon.b64.part0',
   './calendrier-addon.b64.part1',
   './calendrier-addon.b64.part2',
@@ -84,7 +93,7 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
-  if (url.pathname.includes('calendrier-addon') || url.pathname.includes('calendrier-data') || url.pathname.includes('calendrier-v6c3')) {
+  if (url.pathname.includes('calendrier-addon') || url.pathname.includes('calendrier-data') || url.pathname.includes('calendrier-v6c')) {
     event.respondWith(
       fetch(event.request).then((res) => {
         if (res && res.ok && event.request.method === 'GET') {
