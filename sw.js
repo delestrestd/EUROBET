@@ -1,5 +1,5 @@
 /* EuroBet Live — service worker (cache app shell) */
-const CACHE = 'eurobet-v2-calendriers';
+const CACHE = 'eurobet-v3-calendriers-search';
 const PRECACHE = [
   './',
   './index.html',

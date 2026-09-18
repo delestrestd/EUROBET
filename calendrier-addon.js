@@ -22,8 +22,12 @@
     @media (max-width:640px){.cal-filters{grid-template-columns:1fr}.cal-row{grid-template-columns:auto 1fr}.cal-st{grid-column:2;justify-self:start;margin-top:-.25rem}}
   `;
 
+  const MAX = 250;
+  const Q_DEBOUNCE_MS = 280;
+
   let calendrierData = null;
   let calFilter = { q: '', league: '', statut: '', from: '', to: '' };
+  let qDebounceTimer = null;
 
   function foldAccents(s) {
     return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
@@ -104,50 +108,31 @@
     return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
   }
 
-  function bindFilters() {
+  function shellExists(el) {
+    return !!(el && el.querySelector('#calQ') && el.querySelector('.cal-count') && el.querySelector('.cal-list'));
+  }
+
+  function readFiltersFromDom() {
     const qEl = document.getElementById('calQ');
     const lEl = document.getElementById('calLeague');
     const sEl = document.getElementById('calStatut');
     const fEl = document.getElementById('calFrom');
     const tEl = document.getElementById('calTo');
-    const apply = () => {
-      calFilter.q = qEl ? qEl.value : '';
-      calFilter.league = lEl ? lEl.value : '';
-      calFilter.statut = sEl ? sEl.value : '';
-      calFilter.from = fEl ? fEl.value : '';
-      calFilter.to = tEl ? tEl.value : '';
-      render();
-    };
-    if (qEl) qEl.oninput = apply;
-    if (lEl) lEl.onchange = apply;
-    if (sEl) sEl.onchange = apply;
-    if (fEl) fEl.onchange = apply;
-    if (tEl) tEl.onchange = apply;
+    calFilter.q = qEl ? qEl.value : '';
+    calFilter.league = lEl ? lEl.value : '';
+    calFilter.statut = sEl ? sEl.value : '';
+    calFilter.from = fEl ? fEl.value : '';
+    calFilter.to = tEl ? tEl.value : '';
   }
 
-  async function render() {
-    ensureCss();
-    const el = window.contentEl || document.getElementById('content');
-    if (!el) return;
-    el.innerHTML = '<div class="loader"><div class="spinner"></div></div>';
-    try {
-      await ensureData();
-    } catch (err) {
-      el.innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><p>${esc(err.message)}</p></div>`;
-      return;
+  function rowsHtml(shown) {
+    if (!shown.length) {
+      return `<div class="empty"><div class="empty-icon">📭</div><p>Aucun match pour ces filtres.</p></div>`;
     }
-    const leagues = [...new Set(calendrierData.map((m) => m.l).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'fr'));
-    const filtered = getFiltered();
-    const MAX = 250;
-    const shown = filtered.slice(0, MAX);
-    const leagueOpts = ['<option value="">Tous les championnats</option>']
-      .concat(leagues.map((l) => `<option value="${esc(l)}" ${calFilter.league === l ? 'selected' : ''}>${esc(l)}</option>`))
-      .join('');
-    const rowsHtml = shown.length
-      ? shown.map((m) => {
-          const stClass = m.st === 'joué' ? 'joue' : 'prog';
-          const md = m.md ? ` · J${esc(m.md)}` : '';
-          return `<div class="cal-row">
+    return shown.map((m) => {
+      const stClass = m.st === 'joué' ? 'joue' : 'prog';
+      const md = m.md ? ` · J${esc(m.md)}` : '';
+      return `<div class="cal-row">
             <div class="cal-when"><div class="cal-date">${esc(m.d) || '—'}</div><div class="cal-time">${esc(m.h)}</div></div>
             <div>
               <div class="cal-teams">${esc(m.home) || '?'} <span style="color:var(--text-muted);font-weight:600">vs</span> ${esc(m.away) || '?'}</div>
@@ -155,8 +140,62 @@
             </div>
             <span class="cal-st ${stClass}">${esc(m.st)}</span>
           </div>`;
-        }).join('')
-      : `<div class="empty"><div class="empty-icon">📭</div><p>Aucun match pour ces filtres.</p></div>`;
+    }).join('');
+  }
+
+  function countText(filtered) {
+    return `${filtered.length} match${filtered.length > 1 ? 's' : ''}${filtered.length > MAX ? ` (affichage des ${MAX} premiers)` : ''} · saison 2026/27`;
+  }
+
+  function updateResults() {
+    const el = window.contentEl || document.getElementById('content');
+    if (!shellExists(el)) return;
+    const countEl = el.querySelector('.cal-count');
+    const listEl = el.querySelector('.cal-list');
+    const filtered = getFiltered();
+    const shown = filtered.slice(0, MAX);
+    countEl.textContent = countText(filtered);
+    listEl.innerHTML = rowsHtml(shown);
+    const last = document.getElementById('lastUpdate');
+    if (last) last.textContent = `Calendriers · ${filtered.length} résultats`;
+  }
+
+  function applyImmediate() {
+    clearTimeout(qDebounceTimer);
+    qDebounceTimer = null;
+    readFiltersFromDom();
+    updateResults();
+  }
+
+  function applySearchDebounced() {
+    clearTimeout(qDebounceTimer);
+    qDebounceTimer = setTimeout(() => {
+      qDebounceTimer = null;
+      readFiltersFromDom();
+      updateResults();
+    }, Q_DEBOUNCE_MS);
+  }
+
+  function bindFilters(el) {
+    const qEl = el.querySelector('#calQ');
+    const lEl = el.querySelector('#calLeague');
+    const sEl = el.querySelector('#calStatut');
+    const fEl = el.querySelector('#calFrom');
+    const tEl = el.querySelector('#calTo');
+    if (qEl) qEl.oninput = applySearchDebounced;
+    if (lEl) lEl.onchange = applyImmediate;
+    if (sEl) sEl.onchange = applyImmediate;
+    if (fEl) fEl.onchange = applyImmediate;
+    if (tEl) tEl.onchange = applyImmediate;
+  }
+
+  function buildShell(el) {
+    const leagues = [...new Set(calendrierData.map((m) => m.l).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'fr'));
+    const filtered = getFiltered();
+    const shown = filtered.slice(0, MAX);
+    const leagueOpts = ['<option value="">Tous les championnats</option>']
+      .concat(leagues.map((l) => `<option value="${esc(l)}" ${calFilter.league === l ? 'selected' : ''}>${esc(l)}</option>`))
+      .join('');
 
     el.innerHTML = `
       <div class="cal-filters">
@@ -185,11 +224,37 @@
           <input id="calTo" type="date" value="${esc(calFilter.to)}">
         </div>
       </div>
-      <p class="cal-count">${filtered.length} match${filtered.length > 1 ? 's' : ''}${filtered.length > MAX ? ` (affichage des ${MAX} premiers)` : ''} · saison 2026/27</p>
-      <div class="cal-list">${rowsHtml}</div>`;
-    bindFilters();
+      <p class="cal-count">${countText(filtered)}</p>
+      <div class="cal-list">${rowsHtml(shown)}</div>`;
+    bindFilters(el);
     const last = document.getElementById('lastUpdate');
     if (last) last.textContent = `Calendriers · ${filtered.length} résultats`;
+  }
+
+  async function render() {
+    ensureCss();
+    const el = window.contentEl || document.getElementById('content');
+    if (!el) return;
+
+    const hadShell = shellExists(el);
+    if (!calendrierData && !hadShell) {
+      el.innerHTML = '<div class="loader"><div class="spinner"></div></div>';
+    }
+
+    try {
+      await ensureData();
+    } catch (err) {
+      el.innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><p>${esc(err.message)}</p></div>`;
+      return;
+    }
+
+    if (shellExists(el)) {
+      readFiltersFromDom();
+      updateResults();
+      return;
+    }
+
+    buildShell(el);
   }
 
   window.__renderCalendriers = render;
