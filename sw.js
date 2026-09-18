@@ -1,10 +1,22 @@
 /* EuroBet Live — service worker (cache app shell) */
-const CACHE = 'eurobet-v5-calendriers-cups-aliases';
+const CACHE = 'eurobet-v5c-calendriers-cups-aliases';
 const PRECACHE = [
   './',
   './index.html',
   './manifest.webmanifest',
   './calendrier-addon.js',
+  './calendrier-addon.b64.part0',
+  './calendrier-addon.b64.part1',
+  './calendrier-addon.b64.part2',
+  './calendrier-addon.b64.part3',
+  './calendrier-addon.b64.part4',
+  './calendrier-addon.b64.part5',
+  './calendrier-addon.b64.part6',
+  './calendrier-addon.b64.part7',
+  './calendrier-addon.b64.part8',
+  './calendrier-addon.b64.part9',
+  './calendrier-addon.b64.part10',
+  './calendrier-addon.b64.part11',
   './calendrier-data.gz.b64.part0',
   './calendrier-data.gz.b64.part1',
   './calendrier-data.gz.b64.part2',
