@@ -1,5 +1,5 @@
 /* EuroBet Live — service worker (cache app shell) */
-const CACHE = 'eurobet-v6c1-nat-cups';
+const CACHE = 'eurobet-v6c2-nat-cups-ac';
 const PRECACHE = [
   './',
   './index.html',
@@ -19,6 +19,10 @@ const PRECACHE = [
   './calendrier-addon.b64.part11',
   './calendrier-addon.b64.part12',
   './calendrier-addon.b64.part13',
+  './calendrier-addon.b64.part14',
+  './calendrier-addon.b64.part15',
+  './calendrier-addon.b64.part16',
+  './calendrier-addon.b64.part17',
   './calendrier-data.gz.b64.part0',
   './calendrier-data.gz.b64.part1',
   './calendrier-data.gz.b64.part2',
