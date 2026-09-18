@@ -9,15 +9,16 @@
     "Taça de Portugal": 5,
     "Coupe de Turquie": 20,
     "Copa del Rey": 20,
-    "Taça da Liga": 4
+    "Taça da Liga": 4,
+    "Coupe de France": 0
   },
   "national_total": 941,
   "merged_total": 3552,
-  "addon_parts": 14,
+  "addon_parts": 18,
   "data_parts": 28,
   "gaps": [
-    "Coupe de France: aucun match nommé publié (L1 entre le 20/12/2026) — non inventé.",
-    "FA Cup compétition propre dès nov. 2026; qualificatifs inclus (Wikipedia qualifying rounds). Horaires 15:00 BST par défaut si absents.",
+    "Coupe de France: aucun match nommé publié (L1 entre le 20/12/2026) — non inventé. Recheck wiki FR 2026-09-18: ~98× « à déterminer », TheSportsDB events=null.",
+    "FA Cup compétition propre dès nov. 2026; qualificatifs inclus (Wikipedia qualifying rounds).",
     "Coupe de Belgique: dates de tours seulement sur Wikipedia, pas d'affiches.",
     "KNVB Beker: page Wikipedia 2026–27 indisponible.",
     "Taça de Portugal / Copa del Rey / Coupe de Turquie: surtout tours préliminaires (clubs élite plus tard)."
@@ -26,11 +27,17 @@
     "UEFA_C1": "#eab308 gold",
     "UEFA_C3": "#3b82f6 blue",
     "UEFA_C4": "#10b981 green",
-    "national_CN": "#f97316 orange",
+    "national_CN": "#f97316 orange (strengthened v6c2)",
     "league": "default card"
+  },
+  "ux": {
+    "club_autocomplete": true,
+    "accent_insensitive": true,
+    "focus_preserving": true,
+    "cn_filter_optgroup": true,
+    "legend": true
   },
   "built": "2026-09-18",
   "sources": "Wikipedia Football box / qualifying tables + TheSportsDB (TdP/TdL/partial FAC)",
-  "version": "2026-09-18-nat-cups-v6c1",
-  "b64_repair": "loader DATA_PATCHES for parts 9,10,18,20,27 (idempotent if already fixed)"
+  "version": "2026-09-18-nat-cups-v6c2-ac"
 }
