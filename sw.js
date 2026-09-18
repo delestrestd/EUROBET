@@ -1,5 +1,5 @@
 /* EuroBet Live — service worker (cache app shell) */
-const CACHE = 'eurobet-v5c-calendriers-cups-aliases';
+const CACHE = 'eurobet-v6-nat-cups';
 const PRECACHE = [
   './',
   './index.html',
@@ -17,10 +17,15 @@ const PRECACHE = [
   './calendrier-addon.b64.part9',
   './calendrier-addon.b64.part10',
   './calendrier-addon.b64.part11',
+  './calendrier-addon.b64.part12',
+  './calendrier-addon.b64.part13',
   './calendrier-data.gz.b64.part0',
   './calendrier-data.gz.b64.part1',
   './calendrier-data.gz.b64.part2',
   './calendrier-data.gz.b64.part3',
+  './calendrier-data.gz.b64.part4',
+  './calendrier-data.gz.b64.part5',
+  './calendrier-data.gz.b64.part6',
   './icon-192.png',
   './icon-512.png',
   './apple-touch-icon.png'
@@ -47,7 +52,6 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  /* Calendrier assets: network-first so cup data/CSS/aliases are never stuck in SW cache */
   if (
     url.pathname.includes('calendrier-addon') ||
     url.pathname.includes('calendrier-data')

@@ -1,0 +1,34 @@
+{
+  "national_cups": {
+    "Coupe d'Écosse": 65,
+    "Coupe de la Ligue anglaise": 84,
+    "FA Cup": 627,
+    "Coppa Italia": 40,
+    "Coupe de Grèce": 28,
+    "DFB-Pokal": 48,
+    "Taça de Portugal": 5,
+    "Coupe de Turquie": 20,
+    "Copa del Rey": 20,
+    "Taça da Liga": 4
+  },
+  "national_total": 941,
+  "merged_total": 3552,
+  "addon_parts": 14,
+  "data_parts": 7,
+  "gaps": [
+    "Coupe de France: aucun match nommé publié (L1 entre le 20/12/2026) — non inventé.",
+    "FA Cup compétition propre dès nov. 2026; qualificatifs inclus (Wikipedia qualifying rounds). Horaires 15:00 BST par défaut si absents.",
+    "Coupe de Belgique: dates de tours seulement sur Wikipedia, pas d'affiches.",
+    "KNVB Beker: page Wikipedia 2026–27 indisponible.",
+    "Taça de Portugal / Copa del Rey / Coupe de Turquie: surtout tours préliminaires (clubs élite plus tard)."
+  ],
+  "colors": {
+    "UEFA_C1": "#eab308 gold",
+    "UEFA_C3": "#3b82f6 blue",
+    "UEFA_C4": "#10b981 green",
+    "national_CN": "#f97316 orange",
+    "league": "default card"
+  },
+  "built": "2026-09-18",
+  "sources": "Wikipedia Football box / qualifying tables + TheSportsDB (TdP/TdL/partial FAC)"
+}

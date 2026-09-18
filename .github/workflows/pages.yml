@@ -27,7 +27,6 @@ jobs:
       - name: Prepare site
         run: |
           mkdir -p _site
-          # Site = index.html à la racine + assets PWA
           if [ -f index.html ]; then cp index.html _site/; fi
           if [ -f euro-football-live.html ] && [ ! -f _site/index.html ]; then
             cp euro-football-live.html _site/index.html
@@ -36,16 +35,9 @@ jobs:
           for f in manifest.webmanifest sw.js icon.svg icon-192.png icon-512.png apple-touch-icon.png VERSION.txt .nojekyll; do
             [ -f "$f" ] && cp "$f" _site/
           done
-          # Calendriers feature: loader + gzipped data parts + addon b64 payload parts
-          for f in calendrier-addon.js \
-            calendrier-data.gz.b64.part0 calendrier-data.gz.b64.part1 \
-            calendrier-data.gz.b64.part2 calendrier-data.gz.b64.part3 \
-            calendrier-addon.b64.part0 calendrier-addon.b64.part1 \
-            calendrier-addon.b64.part2 calendrier-addon.b64.part3 \
-            calendrier-addon.b64.part4 calendrier-addon.b64.part5 \
-            calendrier-addon.b64.part6 calendrier-addon.b64.part7 \
-            calendrier-addon.b64.part8 calendrier-addon.b64.part9 \
-            calendrier-addon.b64.part10 calendrier-addon.b64.part11; do
+          # Calendriers: loader + data parts + addon b64 parts
+          cp calendrier-addon.js _site/ 2>/dev/null || true
+          for f in calendrier-data.gz.b64.part* calendrier-addon.b64.part*; do
             [ -f "$f" ] && cp "$f" _site/
           done
           ls -la _site
