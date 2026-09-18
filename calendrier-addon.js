@@ -21,8 +21,8 @@
     }));
     (0,eval)(atob(texts.join("")));
     const patches=await Promise.all([0,1,2,3,4,5,6,7].map(async i=>{
-      const r=await fetch("./calendrier-v6c3.b64."+i+"?v=6c3",{cache:"no-cache"});
-      if(!r.ok)throw new Error("patch b64 "+i);
+      const r=await fetch("./calendrier-v6c3.b64.part"+i+"?v=6c3",{cache:"no-cache"});
+      if(!r.ok)throw new Error("patch b64 part"+i);
       return (await r.text()).replace(/\s+/g,"");
     }));
     (0,eval)(atob(patches.join("")));
