@@ -31,5 +31,6 @@
   },
   "built": "2026-09-18",
   "sources": "Wikipedia Football box / qualifying tables + TheSportsDB (TdP/TdL/partial FAC)",
-  "version": "2026-09-18-nat-cups-v6c"
+  "version": "2026-09-18-nat-cups-v6c1",
+  "b64_repair": "loader DATA_PATCHES for parts 9,10,18,20,27 (idempotent if already fixed)"
 }
