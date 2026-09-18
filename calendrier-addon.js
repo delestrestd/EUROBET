@@ -22,8 +22,8 @@
     return texts.join("");
   }
   async function boot(){
-    (0,eval)(await loadJoin("calendrier-addon-app.part",10));
-    (0,eval)(await loadJoin("calendrier-v6c5.part",6));
+    (0,eval)(await loadJoin("calendrier-addon-app.part",9));
+    (0,eval)(await loadJoin("calendrier-v6c5.part",5));
   }
   boot().catch(e=>{console.error("[calendriers]",e);const el=window.contentEl||document.getElementById("content");if(el)el.innerHTML="<div class=\"empty\"><p>Erreur calendriers: "+String(e.message||e)+"</p></div>";});
 })();
