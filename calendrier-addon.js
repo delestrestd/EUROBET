@@ -1,13 +1,12 @@
-/* EuroBet Live — Calendriers addon loader (v6 nat-cups, b64) */
+/* EuroBet Live — Calendriers addon loader (v6b nat-cups segs) */
 (function () {
   async function boot() {
-    const texts = await Promise.all([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map(async (i) => {
-      const r = await fetch("./calendrier-addon.b64.part" + i + "?v=6", { cache: "no-cache" });
-      if (!r.ok) throw new Error("b64 part" + i + " HTTP " + r.status);
-      return (await r.text()).trim();
+    const texts = await Promise.all([0, 1, 2, 3, 4].map(async (i) => {
+      const r = await fetch("./calendrier-addon.seg" + i + ".js?v=6b", { cache: "no-cache" });
+      if (!r.ok) throw new Error("seg" + i + " HTTP " + r.status);
+      return await r.text();
     }));
-    const js = atob(texts.join(""));
-    (0, eval)(js);
+    (0, eval)(texts.join(""));
   }
   boot().catch((e) => {
     console.error("[calendriers]", e);
