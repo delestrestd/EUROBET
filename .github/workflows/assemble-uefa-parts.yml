@@ -1,0 +1,43 @@
+name: Assemble Cal Parts 1-2 UEFA
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'calendrier-data.gz.b64.part1.hex*'
+      - 'calendrier-data.gz.b64.part2.hex*'
+      - '.github/workflows/assemble-uefa-parts.yml'
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assemble part1 and part2 from hex
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+          import hashlib, re
+          def hxread(prefix, n=4):
+              return ''.join(re.sub(r'[^0-9a-f]', '', Path(f'{prefix}.hex{i}').read_text().lower()) for i in range(n))
+          for part, expect in [
+            ('calendrier-data.gz.b64.part1', 'e8a2fd2a4d993032ff65d8cdfe75bff961437070627382a346281cea9789cc40'),
+            ('calendrier-data.gz.b64.part2', '0c04ef0532251da47b44c35d70d6b2be95efb309b4e351dd9a270d76d9880f19'),
+          ]:
+              data = bytes.fromhex(hxread(part))
+              got = hashlib.sha256(data).hexdigest()
+              print(part, len(data), got)
+              assert got == expect, (part, got, expect)
+              Path(part).write_bytes(data)
+              for i in range(4):
+                  p = Path(f'{part}.hex{i}')
+                  if p.exists():
+                      p.unlink(); print('removed', p)
+          PY
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "fix(calendriers): assemble UEFA cups part1/part2 from hex"
+          git push
