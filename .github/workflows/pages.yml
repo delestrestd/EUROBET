@@ -33,11 +33,19 @@ jobs:
             cp euro-football-live.html _site/index.html
           fi
           if [ -f euro-football-live.html ]; then cp euro-football-live.html _site/; fi
-          for f in manifest.webmanifest sw.js icon.svg icon-192.png icon-512.png apple-touch-icon.png VERSION.txt; do
+          for f in manifest.webmanifest sw.js icon.svg icon-192.png icon-512.png apple-touch-icon.png VERSION.txt .nojekyll; do
             [ -f "$f" ] && cp "$f" _site/
           done
-          # Calendriers feature
-          for f in calendrier-addon.js calendrier-data.gz.b64.part0 calendrier-data.gz.b64.part1 calendrier-data.gz.b64.part2 calendrier-data.gz.b64.part3; do
+          # Calendriers feature: loader + gzipped data parts + addon b64 payload parts
+          for f in calendrier-addon.js \
+            calendrier-data.gz.b64.part0 calendrier-data.gz.b64.part1 \
+            calendrier-data.gz.b64.part2 calendrier-data.gz.b64.part3 \
+            calendrier-addon.b64.part0 calendrier-addon.b64.part1 \
+            calendrier-addon.b64.part2 calendrier-addon.b64.part3 \
+            calendrier-addon.b64.part4 calendrier-addon.b64.part5 \
+            calendrier-addon.b64.part6 calendrier-addon.b64.part7 \
+            calendrier-addon.b64.part8 calendrier-addon.b64.part9 \
+            calendrier-addon.b64.part10 calendrier-addon.b64.part11; do
             [ -f "$f" ] && cp "$f" _site/
           done
           ls -la _site
