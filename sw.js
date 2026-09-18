@@ -5,6 +5,14 @@ const PRECACHE = [
   './index.html',
   './manifest.webmanifest',
   './calendrier-addon.js',
+  './calendrier-v6c3.b64.0',
+  './calendrier-v6c3.b64.1',
+  './calendrier-v6c3.b64.2',
+  './calendrier-v6c3.b64.3',
+  './calendrier-v6c3.b64.4',
+  './calendrier-v6c3.b64.5',
+  './calendrier-v6c3.b64.6',
+  './calendrier-v6c3.b64.7',
   './calendrier-addon.b64.part0',
   './calendrier-addon.b64.part1',
   './calendrier-addon.b64.part2',
@@ -76,7 +84,7 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
-  if (url.pathname.includes('calendrier-addon') || url.pathname.includes('calendrier-data')) {
+  if (url.pathname.includes('calendrier-addon') || url.pathname.includes('calendrier-data') || url.pathname.includes('calendrier-v6c3')) {
     event.respondWith(
       fetch(event.request).then((res) => {
         if (res && res.ok && event.request.method === 'GET') {
