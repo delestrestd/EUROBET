@@ -1,5 +1,5 @@
 /* EuroBet Live — service worker (cache app shell) */
-const CACHE = 'eurobet-v6c2-nat-cups-ac';
+const CACHE = 'eurobet-v6c3-search-hist';
 const PRECACHE = [
   './',
   './index.html',

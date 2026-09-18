@@ -1,4 +1,4 @@
-/* EuroBet Live — Calendriers addon loader (v6c2 nat-cups+autocomplete + b64 repair) */
+/* EuroBet Live — Calendriers addon loader (v6c3 search-fix+history + b64 repair) */
 (function () {
   // Exact repairs for bytes still mangled on GitHub for long b64 data parts.
   const DATA_PATCHES = {
@@ -26,7 +26,7 @@
 
   async function boot() {
     const texts = await Promise.all([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17].map(async (i) => {
-      const r = await fetch("./calendrier-addon.b64.part" + i + "?v=6c2", { cache: "no-cache" });
+      const r = await fetch("./calendrier-addon.b64.part" + i + "?v=6c3", { cache: "no-cache" });
       if (!r.ok) throw new Error("b64 part" + i + " HTTP " + r.status);
       return (await r.text()).replace(/\s+/g, "");
     }));
