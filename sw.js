@@ -1,18 +1,33 @@
-/* EuroBet Live — service worker (cache app shell) */
-const CACHE = 'eurobet-v6c5-utf8-parts-nav5';
+/* EuroBet Live — service worker v6c5 gzip UTF-8 parts */
+const CACHE = 'eurobet-v6c5-gz-utf8-nav5';
 const PRECACHE = [
   './',
   './index.html',
   './manifest.webmanifest',
   './calendrier-addon.js',
-  './calendrier-addon-app.part0.js',
-  './calendrier-addon-app.part1.js',
-  './calendrier-addon-app.part2.js',
-  './calendrier-addon-app.part3.js',
-  './calendrier-addon-app.part4.js',
-  './calendrier-v6c5.part0.js',
-  './calendrier-v6c5.part1.js',
-  './calendrier-v6c5.part2.js',
+  './calendrier-addon-app.js.gz.b64.part0',
+  './calendrier-addon-app.js.gz.b64.part1',
+  './calendrier-addon-app.js.gz.b64.part2',
+  './calendrier-addon-app.js.gz.b64.part3',
+  './calendrier-addon-app.js.gz.b64.part4',
+  './calendrier-addon-app.js.gz.b64.part5',
+  './calendrier-addon-app.js.gz.b64.part6',
+  './calendrier-addon-app.js.gz.b64.part7',
+  './calendrier-addon-app.js.gz.b64.part8',
+  './calendrier-addon-app.js.gz.b64.part9',
+  './calendrier-addon-app.js.gz.b64.part10',
+  './calendrier-addon-app.js.gz.b64.part11',
+  './calendrier-addon-app.js.gz.b64.part12',
+  './calendrier-addon-app.js.gz.b64.part13',
+  './calendrier-v6c5.js.gz.b64.part0',
+  './calendrier-v6c5.js.gz.b64.part1',
+  './calendrier-v6c5.js.gz.b64.part2',
+  './calendrier-v6c5.js.gz.b64.part3',
+  './calendrier-v6c5.js.gz.b64.part4',
+  './calendrier-v6c5.js.gz.b64.part5',
+  './calendrier-v6c5.js.gz.b64.part6',
+  './calendrier-v6c5.js.gz.b64.part7',
+  './calendrier-v6c5.js.gz.b64.part8',
   './calendrier-data.gz.b64.part0',
   './calendrier-data.gz.b64.part1',
   './calendrier-data.gz.b64.part2',
@@ -66,7 +81,7 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
-  if (url.pathname.includes('calendrier-addon') || url.pathname.includes('calendrier-data') || url.pathname.includes('calendrier-v6c')) {
+  if (url.pathname.includes('calendrier-')) {
     event.respondWith(
       fetch(event.request).then((res) => {
         if (res && res.ok && event.request.method === 'GET') {
