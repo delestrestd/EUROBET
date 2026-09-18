@@ -13,11 +13,17 @@
       return new Response(patch((await res.text()).replace(/\s+/g,"")),{status:200,headers:{"Content-Type":"text/plain; charset=utf-8"}});
     }catch(e){return res;}
   };
+  async function loadJoin(prefix, n){
+    const texts=await Promise.all([...Array(n).keys()].map(async i=>{
+      const r=await fetch("./"+prefix+i+".js?v=6c5",{cache:"no-cache"});
+      if(!r.ok)throw new Error(prefix+i+" HTTP "+r.status);
+      return await r.text();
+    }));
+    return texts.join("");
+  }
   async function boot(){
-    const addon=await (await fetch("./calendrier-addon-app.js?v=6c5",{cache:"no-cache"})).text();
-    (0,eval)(addon);
-    const patch=await (await fetch("./calendrier-v6c5.js?v=6c5",{cache:"no-cache"})).text();
-    (0,eval)(patch);
+    (0,eval)(await loadJoin("calendrier-addon-app.part", 5));
+    (0,eval)(await loadJoin("calendrier-v6c5.part", 3));
   }
   boot().catch(e=>{console.error("[calendriers]",e);const el=window.contentEl||document.getElementById("content");if(el)el.innerHTML="<div class=\"empty\"><p>Erreur calendriers: "+String(e.message||e)+"</p></div>";});
 })();

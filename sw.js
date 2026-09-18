@@ -1,12 +1,18 @@
 /* EuroBet Live — service worker (cache app shell) */
-const CACHE = 'eurobet-v6c5-utf8-nav5-clear';
+const CACHE = 'eurobet-v6c5-utf8-parts-nav5';
 const PRECACHE = [
   './',
   './index.html',
   './manifest.webmanifest',
   './calendrier-addon.js',
-  './calendrier-addon-app.js',
-  './calendrier-v6c5.js',
+  './calendrier-addon-app.part0.js',
+  './calendrier-addon-app.part1.js',
+  './calendrier-addon-app.part2.js',
+  './calendrier-addon-app.part3.js',
+  './calendrier-addon-app.part4.js',
+  './calendrier-v6c5.part0.js',
+  './calendrier-v6c5.part1.js',
+  './calendrier-v6c5.part2.js',
   './calendrier-data.gz.b64.part0',
   './calendrier-data.gz.b64.part1',
   './calendrier-data.gz.b64.part2',
