@@ -10,18 +10,9 @@
       if(!m)return res;
       const patch=DATA_PATCHES[+m[1]];
       if(!patch||!res.ok)return res;
-      const text=(await res.text()).replace(/\s+/g,"");
-      return new Response(patch(text),{status:200,headers:{"Content-Type":"text/plain; charset=utf-8"}});
+      return new Response(patch((await res.text()).replace(/\s+/g,"")),{status:200,headers:{"Content-Type":"text/plain; charset=utf-8"}});
     }catch(e){return res;}
   };
-  async function loadV6c3(){
-    const texts=await Promise.all([0,1].map(async i=>{
-      const r=await fetch("./calendrier-v6c3.part"+i+".js?v=6c3",{cache:"no-cache"});
-      if(!r.ok)throw new Error("v6c3 part"+i+" HTTP "+r.status);
-      return await r.text();
-    }));
-    (0,eval)(texts.join(""));
-  }
   async function boot(){
     const texts=await Promise.all([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17].map(async i=>{
       const r=await fetch("./calendrier-addon.b64.part"+i+"?v=6c2",{cache:"no-cache"});
@@ -29,11 +20,12 @@
       return (await r.text()).replace(/\s+/g,"");
     }));
     (0,eval)(atob(texts.join("")));
-    await loadV6c3();
+    const patches=await Promise.all([0,1,2,3,4,5,6,7].map(async i=>{
+      const r=await fetch("./calendrier-v6c3.b64."+i+"?v=6c3",{cache:"no-cache"});
+      if(!r.ok)throw new Error("patch b64 "+i);
+      return (await r.text()).replace(/\s+/g,"");
+    }));
+    (0,eval)(atob(patches.join("")));
   }
-  boot().catch(e=>{
-    console.error("[calendriers]",e);
-    const el=window.contentEl||document.getElementById("content");
-    if(el)el.innerHTML="<div class=\"empty\"><p>Erreur calendriers: "+String(e.message||e)+"</p></div>";
-  });
+  boot().catch(e=>{console.error("[calendriers]",e);const el=window.contentEl||document.getElementById("content");if(el)el.innerHTML="<div class=\"empty\"><p>Erreur calendriers: "+String(e.message||e)+"</p></div>";});
 })();
