@@ -1,4 +1,4 @@
-name: Assemble Addon
+name: Assemble calendrier-addon.js
 on:
   workflow_dispatch:
   push:
@@ -17,23 +17,23 @@ jobs:
           python3 <<'PY'
           from pathlib import Path
           import hashlib, re
-          def hxread(p):
-              return re.sub(r'[^0-9a-f]', '', Path(p).read_text().lower())
-          n = len(list(Path('.').glob('calendrier-addon.js.hex*')))
-          ah = ''.join(hxread(f'calendrier-addon.js.hex{i}') for i in range(n))
-          addon = bytes.fromhex(ah)
-          expect = 'ed72f56a730603df9cf85ee6a4a646fe0d7845491a280c03d3343ae0323300f6'
-          got = hashlib.sha256(addon).hexdigest()
-          assert got == expect, got
-          Path('calendrier-addon.js').write_bytes(addon)
-          print('addon OK', len(addon), got)
-          for p in Path('.').glob('calendrier-addon.js.hex*'):
-              p.unlink(); print('removed', p)
+          expect = 'cccac819afb256b2ff73ce605473deb8eef696bf2b16dc4959b62ff4b6a6f729'
+          n = 6
+          hx = ''.join(re.sub(r'[^0-9a-f]', '', Path(f'calendrier-addon.js.hex{i}').read_text().lower()) for i in range(n))
+          data = bytes.fromhex(hx)
+          got = hashlib.sha256(data).hexdigest()
+          print('addon', len(data), got)
+          assert got == expect, (got, expect)
+          Path('calendrier-addon.js').write_bytes(data)
+          for i in range(n):
+              p = Path(f'calendrier-addon.js.hex{i}')
+              if p.exists():
+                  p.unlink(); print('removed', p)
           PY
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git diff --staged --quiet || git commit -m "fix(calendriers): update addon to prefer loadParts()"
+          git diff --staged --quiet || git commit -m "feat(calendriers): cup highlight addon UI (C1 gold / C3 blue / C4 green)"
           git push
