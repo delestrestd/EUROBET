@@ -1,4 +1,4 @@
-/* EuroBet Live — Calendriers addon (fixtures 2026/27) */
+/* EuroBet Live — Calendriers addon (fixtures 2026/27 + coupes UEFA) */
 (function () {
   const CSS = `
     .cal-filters{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-bottom:1rem;padding:.9rem;background:var(--bg-card);border:1px solid var(--border);border-radius:12px}
@@ -11,11 +11,20 @@
     .cal-list{display:flex;flex-direction:column;gap:.55rem}
     .cal-row{display:grid;grid-template-columns:auto 1fr auto;gap:.75rem;align-items:center;padding:.75rem .9rem;background:var(--bg-card);border:1px solid var(--border);border-radius:10px}
     .cal-row:hover{border-color:#2a3644}
+    .cal-row.cup{border-color:rgba(168,85,247,.55);background:linear-gradient(135deg,rgba(168,85,247,.14),rgba(59,130,246,.08));box-shadow:inset 3px 0 0 #a855f7}
+    .cal-row.cup.c1{border-color:rgba(234,179,8,.65);background:linear-gradient(135deg,rgba(234,179,8,.16),rgba(168,85,247,.08));box-shadow:inset 3px 0 0 #eab308}
+    .cal-row.cup.c3{border-color:rgba(59,130,246,.65);background:linear-gradient(135deg,rgba(59,130,246,.16),rgba(14,165,233,.08));box-shadow:inset 3px 0 0 #3b82f6}
+    .cal-row.cup.c4{border-color:rgba(16,185,129,.65);background:linear-gradient(135deg,rgba(16,185,129,.16),rgba(52,211,153,.08));box-shadow:inset 3px 0 0 #10b981}
+    .cal-row.cup:hover{border-color:#c084fc}
     .cal-when{text-align:center;min-width:4.2rem}
     .cal-date{font-size:.78rem;font-weight:700;color:var(--text)}
     .cal-time{font-size:.85rem;color:#ffdd00;font-weight:700}
     .cal-teams{font-size:.95rem;font-weight:700;line-height:1.35}
-    .cal-meta{font-size:.75rem;color:var(--text-muted);margin-top:.25rem}
+    .cal-meta{font-size:.75rem;color:var(--text-muted);margin-top:.25rem;display:flex;flex-wrap:wrap;gap:.35rem;align-items:center}
+    .cal-badge{font-size:.65rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:.18rem .45rem;border-radius:999px;white-space:nowrap}
+    .cal-badge.c1{background:rgba(234,179,8,.22);color:#facc15}
+    .cal-badge.c3{background:rgba(59,130,246,.22);color:#60a5fa}
+    .cal-badge.c4{background:rgba(16,185,129,.22);color:#34d399}
     .cal-st{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;padding:.28rem .5rem;border-radius:6px;white-space:nowrap}
     .cal-st.prog{background:rgba(255,221,0,.15);color:#ffdd00}
     .cal-st.joue{background:rgba(80,200,120,.15);color:#50c878}
@@ -24,6 +33,8 @@
 
   const MAX = 250;
   const Q_DEBOUNCE_MS = 280;
+  const CUP_CODES = { C1: 'c1', C3: 'c3', C4: 'c4' };
+  const CUP_BADGE = { C1: 'C1', C3: 'C3', C4: 'C4' };
 
   let calendrierData = null;
   let calFilter = { q: '', league: '', statut: '', from: '', to: '' };
@@ -31,6 +42,15 @@
 
   function foldAccents(s) {
     return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  }
+
+  function cupCode(m) {
+    if (m && m.c && CUP_CODES[m.c]) return m.c;
+    const l = (m && m.l) || '';
+    if (l.indexOf('Ligue des champions') !== -1 || l.indexOf('C1') === 0) return 'C1';
+    if (l.indexOf('Ligue Europa') !== -1 || l.indexOf('C3') === 0) return 'C3';
+    if (l.indexOf('Ligue Conf') !== -1 || l.indexOf('C4') === 0) return 'C4';
+    return '';
   }
 
   function ensureCss() {
@@ -91,7 +111,7 @@
 
   function getFiltered() {
     const q = foldAccents(calFilter.q.trim());
-    return (calendrierData || []).filter((m) => {
+    const out = (calendrierData || []).filter((m) => {
       if (calFilter.league && m.l !== calFilter.league) return false;
       if (calFilter.statut && m.st !== calFilter.statut) return false;
       if (calFilter.from && m.d < calFilter.from) return false;
@@ -102,6 +122,14 @@
       }
       return true;
     });
+    out.sort((a, b) => {
+      const dd = String(a.d || '').localeCompare(String(b.d || ''));
+      if (dd) return dd;
+      const hh = String(a.h || '').localeCompare(String(b.h || ''));
+      if (hh) return hh;
+      return String(a.l || '').localeCompare(String(b.l || ''), 'fr');
+    });
+    return out;
   }
 
   function esc(s) {
@@ -131,12 +159,17 @@
     }
     return shown.map((m) => {
       const stClass = m.st === 'joué' ? 'joue' : 'prog';
+      const code = cupCode(m);
+      const cupCls = code ? (' cup ' + CUP_CODES[code]) : '';
+      const badge = code
+        ? `<span class="cal-badge ${CUP_CODES[code]}">${CUP_BADGE[code]}</span>`
+        : '';
       const md = m.md ? ` · J${esc(m.md)}` : '';
-      return `<div class="cal-row">
+      return `<div class="cal-row${cupCls}">
             <div class="cal-when"><div class="cal-date">${esc(m.d) || '—'}</div><div class="cal-time">${esc(m.h)}</div></div>
             <div>
               <div class="cal-teams">${esc(m.home) || '?'} <span style="color:var(--text-muted);font-weight:600">vs</span> ${esc(m.away) || '?'}</div>
-              <div class="cal-meta">${esc(m.l)}${md}</div>
+              <div class="cal-meta">${badge}<span>${esc(m.l)}${md}</span></div>
             </div>
             <span class="cal-st ${stClass}">${esc(m.st)}</span>
           </div>`;
@@ -144,7 +177,9 @@
   }
 
   function countText(filtered) {
-    return `${filtered.length} match${filtered.length > 1 ? 's' : ''}${filtered.length > MAX ? ` (affichage des ${MAX} premiers)` : ''} · saison 2026/27`;
+    const cups = filtered.filter((m) => !!cupCode(m)).length;
+    const cupNote = cups ? ` · dont ${cups} coupe${cups > 1 ? 's' : ''} UEFA` : '';
+    return `${filtered.length} match${filtered.length > 1 ? 's' : ''}${filtered.length > MAX ? ` (affichage des ${MAX} premiers)` : ''}${cupNote} · saison 2026/27`;
   }
 
   function updateResults() {
@@ -189,8 +224,16 @@
     if (tEl) tEl.onchange = applyImmediate;
   }
 
+  function leagueSortKey(l) {
+    if (l.indexOf('C1') === 0 || l.indexOf('Ligue des champions') !== -1) return '0-' + l;
+    if (l.indexOf('C3') === 0 || l.indexOf('Ligue Europa') !== -1) return '1-' + l;
+    if (l.indexOf('C4') === 0 || l.indexOf('Ligue Conf') !== -1) return '2-' + l;
+    return '9-' + l;
+  }
+
   function buildShell(el) {
-    const leagues = [...new Set(calendrierData.map((m) => m.l).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'fr'));
+    const leagues = [...new Set(calendrierData.map((m) => m.l).filter(Boolean))]
+      .sort((a, b) => leagueSortKey(a).localeCompare(leagueSortKey(b), 'fr'));
     const filtered = getFiltered();
     const shown = filtered.slice(0, MAX);
     const leagueOpts = ['<option value="">Tous les championnats</option>']
@@ -204,7 +247,7 @@
           <input id="calQ" type="search" placeholder="Ex. Paris, Bayern, Celtic…" value="${esc(calFilter.q)}">
         </div>
         <div class="cal-field">
-          <label for="calLeague">Championnat</label>
+          <label for="calLeague">Championnat / Coupe</label>
           <select id="calLeague">${leagueOpts}</select>
         </div>
         <div class="cal-field">
